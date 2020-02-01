@@ -11,6 +11,7 @@ print('Metryczak-Beta v 1.0')
 # TODO: MENU do obslugi
 # TODO: Obsluga wielu plikow na raz
 # TODO: Plik ustawien
+# testowy comment
 
 # Basic logging settings
 logging.basicConfig(level=logging.WARNING, format='%(asctime)s %(levelname)s %(message)s')
