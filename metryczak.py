@@ -173,4 +173,3 @@ for line in input_content:
 
 new_workbook.save(output_file)
 logging.info(f'Plik {output_file} zapisany poprawnie')
-
