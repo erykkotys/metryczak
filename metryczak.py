@@ -1,7 +1,8 @@
-import sqlite3
-import re
-import os
 import logging
+import os
+import re
+import sqlite3
+
 import openpyxl
 from openpyxl.styles import NamedStyle, Font
 
@@ -23,10 +24,13 @@ sql = sql_connection.cursor()
 while True:
     print('Podaj nazwe pliku csv:')
     input_file = input()
+    input_folder = r'E:\Metryki'
+    input_path = os.path.join(input_folder, input_file)
+    # If we press Enter to skip input, test file is loaded
     if input_file == '':
-        input_file = 'wk 314.csv'
+        input_file = 'test.csv'
     try:
-        with open(input_file, 'r') as file:
+        with open(input_path, 'r') as file:
             input_content = file.readlines()
             break
     except FileNotFoundError:
@@ -34,7 +38,7 @@ while True:
         continue
 
 # Output path is same
-output_file = os.path.splitext(input_file)[0] + '.xlsx'
+output_file = os.path.splitext(input_path)[0] + '.xlsx'
 if os.path.exists(output_file):
     try:
         os.remove(output_file)
@@ -48,7 +52,7 @@ current_row = 1
 
 #  Adding new entries to database
 def db_add():
-    print(f'Dodaje nowy wpis do bazy dla {line}')
+    print(f'Dodaje nowy wpis do bazy dla {line.rstrip()}')
     print('Podaj tytuł utworu:')
     title = input()
     print('Podaj kompozytorów utworu:')
@@ -99,7 +103,8 @@ def db_match(title_search, char_no):
                                   {'title': title_search[0:char_no].lower()+'%'})
             results = matches.fetchall()
             if len(results) > 1:
-                logging.warning(f'Znalazlem {len(results)} rejestrow pasujacych do wpisu {title_search}:')
+                logging.warning(f'Znalazlem {len(results)} rejestrow pasujacych '
+                                f'do wpisu {title_search} w linii \n{line.rstrip()}:')
                 for index, result in enumerate(results):
                     print(f'{index}. {result}')
                 print(f'{len(results)}. Usun jeden z powyzszych rejestrow z bazy')
@@ -157,7 +162,7 @@ for line in input_content:
     try:
         time = time_pattern.search(line).group()
     except AttributeError:
-        logging.debug(f'Nie znalazlem czasu utworu w wierszu {line}')
+        logging.debug(f'Nie znalazlem czasu utworu w wierszu {line.rstrip()}')
     if time is not None:
         logging.debug(f'Czas utworu {time}')
     intro_check()
@@ -172,4 +177,4 @@ for line in input_content:
 
 
 new_workbook.save(output_file)
-logging.info(f'Plik {output_file} zapisany poprawnie')
+print(f'Plik {output_file} zapisany poprawnie')
