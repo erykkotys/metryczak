@@ -22,9 +22,9 @@ sql = sql_connection.cursor()
 
 # Input path is received form command line as argument
 while True:
-    print('Podaj nazwe pliku csv:')
-    input_file = input()
     input_folder = r'E:\Metryki'
+    print(f'Podaj nazwe pliku csv (w folderze {input_folder}):')
+    input_file = input()
     input_path = os.path.join(input_folder, input_file)
     # If we press Enter to skip input, test file is loaded
     if input_file == '':
